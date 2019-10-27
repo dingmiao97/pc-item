@@ -3,11 +3,11 @@
     <el-card>
       <img src="../../assets/logo_index.png" alt />
       <!-- 表单 -->
-      <el-form :model="loginfrom">
-        <el-form-item>
+      <el-form :model="loginfrom" :rules="Loginserve" status-icon ref="logins">
+        <el-form-item prop="mobile">
           <el-input v-model="loginfrom.mobile" placeholder="请输入手机号"></el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="code">
           <el-input
             v-model="loginfrom.code"
             placeholder="请输入验证码"
@@ -17,7 +17,7 @@
         </el-form-item>
         <el-checkbox :value="1>0">我已阅读并同意用户协议和隐私条款</el-checkbox>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit" style="width:100%;margin-top:20px">登录</el-button>
+          <el-button type="primary" @click="loginsub" style="width:100%;margin-top:20px">登录</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -27,11 +27,46 @@
 <script>
 export default {
   data () {
+    const validateMobile = (rule, value, callback) => {
+      if (/^1[3-9]\d{9}$/.test(value)) {
+        callback()
+      } else {
+        callback(new Error('手机号码格式不对'))
+      }
+    }
+
     return {
       loginfrom: {
         mobile: '',
         code: ''
+      },
+      Loginserve: {
+        mobile: [
+          { required: true, message: '请输入手机号', trigger: 'blur' },
+          { validator: validateMobile, trigger: 'blur' }
+        ],
+        code: [
+          { required: true, message: '请输入验证码', trigger: 'blur' },
+          { len: 6, message: '请输入6位', trigger: 'blur' }
+        ]
       }
+    }
+  },
+  methods: {
+    loginsub () {
+      this.$refs['logins'].validate(valid => {
+        if (valid) {
+          // 跳转
+          this.$axios
+            .post('authorizations', this.loginfrom)
+            .then(res => {
+              this.$router.push('/')
+            })
+            .catch(() => {
+              this.$message.error('登录失败')
+            })
+        }
+      })
     }
   }
 }
