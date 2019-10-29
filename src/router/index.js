@@ -4,9 +4,11 @@ import Login from '@/views/login'
 import Home from '@/views/home'
 import welcome from '@/views/welcome'
 import NotFound from '@/views/404'
+import local from '@/utils/local'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
+
   routes: [{
     // 登录
     path: '/login',
@@ -27,6 +29,12 @@ const router = new VueRouter({
     component: NotFound
   }
   ]
+})
+// 前置路由守卫
+router.beforeEach((to, from, next) => {
+  const user = local.getUser()
+  if (to.path !== '/login' && !user) return next('/login')
+  next()
 })
 
 export default router

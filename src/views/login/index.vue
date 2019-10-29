@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import local from '@/utils/local'
 export default {
   data () {
     const validateMobile = (rule, value, callback) => {
@@ -60,6 +61,10 @@ export default {
           this.$axios
             .post('authorizations', this.loginfrom)
             .then(res => {
+              // res代表当前对象
+              // res.data表示响应主体
+              // 获取用户信息
+              local.setUser(res.data.data)
               this.$router.push('/')
             })
             .catch(() => {
