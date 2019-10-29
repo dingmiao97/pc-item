@@ -4,7 +4,7 @@
       <!-- logo -->
       <div class="logo" :class="{smallLogo :!isOpen}"></div>
       <el-menu
-        default-active="/"
+        :default-active="$route.path"
         class="el-menu-vertical-demo"
         background-color="#002233"
         text-color="#fff"
@@ -51,15 +51,15 @@
         <!-- 文字 -->
         <span class="text">江苏传智播客有限公司</span>
         <!-- 下拉菜单 -->
-        <el-dropdown class="dropdown">
+        <el-dropdown class="dropdown" @command="handleCommand">
           <span class="el-dropdown-link">
-            <img src="../../assets/avatar.jpg" alt />
-            <span class="username">用户名</span>
+            <img :src="potho" alt />
+            <span class="username">{{name}}</span>
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-setting">个人设置</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-unlock">用户登录</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-setting" command="setting">个人设置</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-unlock" command="logout">用户退出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
@@ -71,17 +71,35 @@
 </template>
 
 <script>
+import local from '@/utils/local'
 export default {
   data () {
     // 是否打开
     return {
-      isOpen: true
+      isOpen: true,
+      potho: '',
+      name: ''
     }
   },
   methods: {
     toggle () {
       this.isOpen = !this.isOpen
+    },
+    setting () {
+      this.$router.push('/setting')
+    },
+    logout () {
+      local.delUser()
+      this.$router.push('/login')
+    },
+    handleCommand (command) {
+      this[command]()
     }
+  },
+  created () {
+    const user = local.getUser() || {}
+    this.potho = user.potho
+    this.name = user.name
   }
 }
 </script>

@@ -55,21 +55,31 @@ export default {
   },
   methods: {
     loginsub () {
-      this.$refs['logins'].validate(valid => {
+      this.$refs['logins'].validate(async valid => {
         if (valid) {
           // 跳转
-          this.$axios
-            .post('authorizations', this.loginfrom)
-            .then(res => {
-              // res代表当前对象
-              // res.data表示响应主体
-              // 获取用户信息
-              local.setUser(res.data.data)
-              this.$router.push('/')
-            })
-            .catch(() => {
-              this.$message.error('登录失败')
-            })
+          // this.$axios
+          //   .post('authorizations', this.loginfrom)
+          //   .then(res => {
+          //     // res代表当前对象
+          //     // res.data表示响应主体
+          //     // 获取用户信息
+          //     local.setUser(res.data.data)
+          //     this.$router.push('/')
+          // })
+          // .catch(() => {
+          //   this.$message.error('登录失败111')
+          // })
+          try {
+            const res = await this.$axios.post(
+              'authorizations',
+              this.loginfrom
+            )
+            local.setUser(res.data.data)
+            this.$router.push('/')
+          } catch (e) {
+            this.$message.error('登录失败')
+          }
         }
       })
     }
