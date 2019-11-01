@@ -2,7 +2,18 @@
 import axios from 'axios'
 import local from '@/utils/local'
 import router from '../router'
+import JsonBig from 'json-bigint'
 axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0/'
+axios.defaults.transformResponse = [function (data) {
+  try {
+    // 后台可能没有任何响应内容 data的值为null
+    const result = JsonBig.parse(data)
+    return result
+  } catch (e) {
+    return data
+  }
+}]
+
 // if (local.getUser()) {
 //   axios.defaults.headers.Authorization = `Bearer ${local.getUser().token}`
 // }
