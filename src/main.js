@@ -5,6 +5,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import router from '@/router'
 import axios from '@/api'
+import '@/style/index.less'
 // import Mybread from '@/components/my-bread.vue'
 // Vue.component('my-bread', Mybread)
 import plugin from '@/components'
