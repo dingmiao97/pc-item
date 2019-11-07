@@ -2,17 +2,17 @@
   <el-container class="home-container">
     <el-aside :width="isOpen?'200px':'64px'">
       <!-- logo -->
-      <div class="logo" :class="{smallLogo :!isOpen}"></div>
+      <div :class="{smallLogo :!isOpen}" class="logo"></div>
       <el-menu
-        :default-active="$route.path"
-        class="el-menu-vertical-demo"
-        background-color="#002233"
-        text-color="#fff"
-        active-text-color="#ffd04b"
-        style="border-right:none"
         :collapse="!isOpen"
         :collapse-transition="false"
+        :default-active="$route.path"
+        active-text-color="#ffd04b"
+        background-color="#002233"
+        class="el-menu-vertical-demo"
         router
+        style="border-right:none"
+        text-color="#fff"
       >
         <el-menu-item index="/">
           <i class="el-icon-s-home"></i>
@@ -47,19 +47,19 @@
     <el-container>
       <el-header>
         <!-- 图标 -->
-        <span class="el-icon-s-fold icon" @click="toggle"></span>
+        <span @click="toggle" class="el-icon-s-fold icon"></span>
         <!-- 文字 -->
         <span class="text">江苏传智播客有限公司</span>
         <!-- 下拉菜单 -->
-        <el-dropdown class="dropdown" @command="handleCommand">
+        <el-dropdown @command="handleCommand" class="dropdown">
           <span class="el-dropdown-link">
             <img :src="potho" alt />
             <span class="username">{{name}}</span>
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-setting" command="setting">个人设置</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-unlock" command="logout">用户退出</el-dropdown-item>
+            <el-dropdown-item command="setting" icon="el-icon-setting">个人设置</el-dropdown-item>
+            <el-dropdown-item command="logout" icon="el-icon-unlock">用户退出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
@@ -72,6 +72,7 @@
 
 <script>
 import local from '@/utils/local'
+import eventBus from '../../eventBus.js'
 export default {
   data () {
     // 是否打开
@@ -100,6 +101,14 @@ export default {
     const user = local.getUser() || {}
     this.potho = user.potho
     this.name = user.name
+    // 接受数据
+    eventBus.$on('update', name => {
+      this.name = name
+    })
+    // 接受上传的头像
+    eventBus.$on('updatePhoto', photo => {
+      this.potho = photo
+    })
   }
 }
 </script>
@@ -116,11 +125,11 @@ export default {
     .logo {
       width: 100%;
       height: 60px;
-      background: #002044 url("../../assets/logo_admin.png") no-repeat center /
+      background: #002044 url('../../assets/logo_admin.png') no-repeat center /
         140px auto;
     }
     .smallLogo {
-      background-image: url("../../assets/logo_admin_01.png");
+      background-image: url('../../assets/logo_admin_01.png');
       background-size: 36px auto;
     }
   }

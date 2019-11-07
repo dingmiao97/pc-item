@@ -101,6 +101,7 @@ export default {
         this.getimages()
       }, 2000)
     },
+    // 图片的渲染
     async getimages () {
       const res = await this.$axios.get('user/images', {
         params: this.reqparams

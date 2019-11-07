@@ -7,10 +7,13 @@
 import Mybread from '@/components/my-bread.vue'
 // 频道组件
 import Mychannel from '@/components/my-channel.vue'
+// 发布文章的组件
+import Myimage from '@/components/my-image.vue'
 
 export default {
   install (Vue) {
     Vue.component('my-bread', Mybread)
     Vue.component(Mychannel.name, Mychannel)
+    Vue.component(Myimage.name, Myimage)
   }
 }
